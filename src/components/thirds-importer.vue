@@ -57,7 +57,6 @@
 import { read, utils } from "xlsx";
 
 import { ThirdPartyImporter } from "../services/importer_thirds";
-
 export default {
   name: "third-importer",
   props: {
@@ -75,13 +74,15 @@ export default {
       try {
         if (this.thirds.length > 0) {
           const upload = await ThirdPartyImporter.sendData(this.thirds);
-          alert(`Subiendo ${this.thirds.length} Terceros`);
+          alert(`Subiendo ${upload.data.number} Terceros`);
+
           alert(
             "¡Terceros cargados satisfactoriamente en la base de datos! " +
               upload.data.message
           );
+          console.log(upload);
         } else {
-          alert("No se encuentra informacion para subir");
+          alert("¡No se encuentra información para subir!");
         }
       } catch (error) {
         alert(error.message);

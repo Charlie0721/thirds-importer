@@ -1,9 +1,9 @@
 import axios from "axios";
-
+//http://192.168.1.134:3001
 //const url=process.env.VUE_APP_RUTA_API;
 const axiosInstance = axios.create({
 
-    baseURL: `http://192.168.1.134:3001`,
+    baseURL:process.env.VUE_APP_RUTA_API, //`${url}`,
     headers: {
         'Content-Type': 'application/json',
 
