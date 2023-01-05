@@ -72,19 +72,20 @@ export default {
   methods: {
     async uploadExcel() {
       try {
+        const upload = await ThirdPartyImporter.sendData(this.thirds);
+        console.log(upload);
         if (this.thirds.length > 0) {
-          const upload = await ThirdPartyImporter.sendData(this.thirds);
           alert(`Subiendo ${upload.data.number} Terceros`);
 
           alert(
             "¡Terceros cargados satisfactoriamente en la base de datos! " +
               upload.data.message
           );
-          console.log(upload);
         } else {
           alert("¡No se encuentra información para subir!");
         }
       } catch (error) {
+        console.log(error.message);
         alert(error.message);
       }
     },
@@ -101,6 +102,7 @@ export default {
             const workBookSheets = workbook.SheetNames;
             const sheet = workBookSheets[0];
             const dataExcel = utils.sheet_to_json(workbook.Sheets[sheet]);
+
             this.thirds = dataExcel;
           }.bind(this);
           reader.readAsArrayBuffer(file);
