@@ -27,6 +27,13 @@
         >
           Eliminar Terceros
         </button>
+        <button
+          type="button"
+          class="btn btn-warning btn-lg"
+          @click="newImporter()"
+        >
+          Reiniciar App
+        </button>
       </div>
     </div>
     <br />
@@ -70,17 +77,30 @@ export default {
     };
   },
   methods: {
+    newImporter() {
+      location.reload();
+    },
+     validateData() {
+      const responseFind = this.thirds.find((element) => {
+       return element.nombres=== ""  
+      });
+      alert(responseFind);
+      console.log(responseFind);
+    },
     async uploadExcel() {
       try {
-        const upload = await ThirdPartyImporter.sendData(this.thirds);
-        console.log(upload);
         if (this.thirds.length > 0) {
+          this.validateData();
+          const upload = await ThirdPartyImporter.sendData(this.thirds);
           alert(`Subiendo ${upload.data.number} Terceros`);
-
+          console.log(upload);
           alert(
             "¡Terceros cargados satisfactoriamente en la base de datos! " +
               upload.data.message
           );
+          const myTimeout = setTimeout(this.newImporter(), 15000);
+
+          clearTimeout(myTimeout);
         } else {
           alert("¡No se encuentra información para subir!");
         }
