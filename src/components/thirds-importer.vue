@@ -80,17 +80,10 @@ export default {
     newImporter() {
       location.reload();
     },
-     validateData() {
-      const responseFind = this.thirds.find((element) => {
-       return element.nombres=== ""  
-      });
-      alert(responseFind);
-      console.log(responseFind);
-    },
+
     async uploadExcel() {
       try {
         if (this.thirds.length > 0) {
-          this.validateData();
           const upload = await ThirdPartyImporter.sendData(this.thirds);
           alert(`Subiendo ${upload.data.number} Terceros`);
           console.log(upload);
@@ -123,7 +116,201 @@ export default {
             const sheet = workBookSheets[0];
             const dataExcel = utils.sheet_to_json(workbook.Sheets[sheet]);
 
-            this.thirds = dataExcel;
+            const searchRep = dataExcel.reduce((acc, data) => {
+              acc[data.nit] = ++acc[data.nit] || 0;
+              return acc;
+            }, {});
+
+            const duplicates = dataExcel.filter((item) => {
+              return searchRep[item.nit];
+            });
+
+            let dataFindNames;
+            let findPhoneNumbers;
+            let dv;
+            let idDepto;
+            let idMunicipio;
+            let tipopersona;
+            let idActividad;
+            let idRegimen;
+            let tipoId;
+            let tipoFactura;
+            for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].nombres === undefined ||
+                dataExcel[index].nombres === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].nombres === undefined ||
+                  dataExcel[index].nombres === "";
+                dataFindNames = findEmptyData;
+              }
+            }
+            for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].telefono === undefined ||
+                dataExcel[index].telefono === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].telefono === undefined ||
+                  dataExcel[index].telefono === "";
+                findPhoneNumbers = findEmptyData;
+              }
+            }
+            for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].digito === undefined ||
+                dataExcel[index].digito === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].digito === undefined ||
+                  dataExcel[index].digito === "";
+                dv = findEmptyData;
+              }
+            }
+            for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].iddepto === undefined ||
+                dataExcel[index].iddepto === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].iddepto === undefined ||
+                  dataExcel[index].iddepto === "";
+                idDepto = findEmptyData;
+              }
+            }
+            for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].idmunicipio === undefined ||
+                dataExcel[index].idmunicipio === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].idmunicipio === undefined ||
+                  dataExcel[index].idmunicipio === "";
+                idMunicipio = findEmptyData;
+              }
+            }
+            for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].tipopersona === undefined ||
+                dataExcel[index].tipopersona === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].tipopersona === undefined ||
+                  dataExcel[index].tipopersona === "";
+                tipopersona = findEmptyData;
+              }
+            }
+            for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].idactividad === undefined ||
+                dataExcel[index].idactividad === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].idactividad === undefined ||
+                  dataExcel[index].idactividad === "";
+                idActividad = findEmptyData;
+              }
+            }
+            for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].idregimen === undefined ||
+                dataExcel[index].idregimen === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].idregimen === undefined ||
+                  dataExcel[index].idregimen === "";
+                idRegimen = findEmptyData;
+              }
+            }
+            for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].TipoId === undefined ||
+                dataExcel[index].TipoId === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].TipoId === undefined ||
+                  dataExcel[index].TipoId === "";
+                tipoId = findEmptyData;
+              }
+            }
+                 for (let index = 0; index < dataExcel.length; index++) {
+              if (
+                dataExcel[index].tipofactura === undefined ||
+                dataExcel[index].tipofactura === ""
+              ) {
+                const findEmptyData =
+                  dataExcel[index].tipofactura === undefined ||
+                  dataExcel[index].tipofactura === "";
+                tipoFactura = findEmptyData;
+              }
+            }
+
+            if (dv === true) {
+              alert(
+                "Revise el archivo, debe llenar el digito de verificación !"
+              );
+              return;
+            }
+            if (dataFindNames === true) {
+              alert("Revise el archivo, se encontraron nombres en Blanco !");
+              return;
+            }
+            if (findPhoneNumbers === true) {
+              alert(
+                "Revise el archivo, se encontraron números teléfonicos en Blanco !"
+              );
+              return;
+            }
+            if (idDepto === true) {
+              alert(
+                "Revise el archivo, se encontraron campos vacios en la columna iddepto !"
+              );
+              return;
+            }
+            if (idMunicipio === true) {
+              alert(
+                "Revise el archivo, se encontraron campos vacios en la columna idmunicipio !"
+              );
+              return;
+            }
+            if (tipopersona === true) {
+              alert(
+                "Revise el archivo, se encontraron campos vacios en la columna tipopersona !"
+              );
+              return;
+            }
+            if (idActividad === true) {
+              alert(
+                "Revise el archivo, se encontraron campos vacios en la columna idactividad !"
+              );
+              return;
+            }
+            if (idRegimen === true) {
+              alert(
+                "Revise el archivo, se encontraron campos vacios en la columna idregimen !"
+              );
+              return;
+            }
+            if (tipoId === true) {
+              alert(
+                "Revise el archivo, se encontraron campos vacios en la columna TipoId !"
+              );
+              return;
+            }
+                if (tipoFactura === true) {
+              alert(
+                "Revise el archivo, se encontraron campos vacios en la columna tipofactura !"
+              );
+              return;
+            }
+
+            if (duplicates.length > 0) {
+              alert("Revise el archivo, tiene nit repetidos");
+              return;
+            } else {
+              this.thirds = dataExcel;
+            }
           }.bind(this);
           reader.readAsArrayBuffer(file);
         } catch (exception) {
