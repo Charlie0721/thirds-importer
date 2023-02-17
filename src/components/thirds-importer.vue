@@ -27,13 +27,6 @@
         >
           Eliminar Terceros
         </button>
-        <button
-          type="button"
-          class="btn btn-warning btn-lg"
-          @click="newImporter()"
-        >
-          Reiniciar App
-        </button>
       </div>
     </div>
     <br />
@@ -62,7 +55,6 @@
 
 <script>
 import { read, utils } from "xlsx";
-
 import { ThirdPartyImporter } from "../services/importer_thirds";
 export default {
   name: "third-importer",
@@ -125,6 +117,15 @@ export default {
               return searchRep[item.nit];
             });
 
+            const searchRepBarcode = dataExcel.reduce((acc, data) => {
+              acc[data.barcode] = ++acc[data.barcode] || 0;
+              return acc;
+            }, {});
+
+            const duplicatesBarcode = dataExcel.filter((item) => {
+              return searchRepBarcode[item.barcode];
+            });
+
             let dataFindNames;
             let findPhoneNumbers;
             let dv;
@@ -135,6 +136,7 @@ export default {
             let idRegimen;
             let tipoId;
             let tipoFactura;
+
             for (let index = 0; index < dataExcel.length; index++) {
               if (
                 dataExcel[index].nombres === undefined ||
@@ -234,7 +236,7 @@ export default {
                 tipoId = findEmptyData;
               }
             }
-                 for (let index = 0; index < dataExcel.length; index++) {
+            for (let index = 0; index < dataExcel.length; index++) {
               if (
                 dataExcel[index].tipofactura === undefined ||
                 dataExcel[index].tipofactura === ""
@@ -298,7 +300,7 @@ export default {
               );
               return;
             }
-                if (tipoFactura === true) {
+            if (tipoFactura === true) {
               alert(
                 "Revise el archivo, se encontraron campos vacios en la columna tipofactura !"
               );
@@ -307,6 +309,11 @@ export default {
 
             if (duplicates.length > 0) {
               alert("Revise el archivo, tiene nit repetidos");
+              return;
+            }
+
+            if (duplicatesBarcode.length > 0) {
+              alert("Revise el archivo, tiene Codigos de barras repetidos");
               return;
             } else {
               this.thirds = dataExcel;
